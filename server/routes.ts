@@ -16,14 +16,8 @@ const pool = new Pool({
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Serve our custom index.html file for both / and /competition
-  app.get('/', (req, res) => {
-    res.sendFile('index.html', { root: process.cwd() });
-  });
-  
-  app.get('/competition', (req, res) => {
-    res.sendFile('index.html', { root: process.cwd() });
-  });
+  // API routes will be handled here, 
+  // Static files will be served by the Vite middleware
   
   // AdQuake config route
   app.get('/api/adquake-config', (req, res) => {
