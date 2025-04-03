@@ -4,8 +4,27 @@ import { storage } from "./storage";
 import { setupAuth } from "./auth";
 import { insertAdViewSchema, insertRewardSchema } from "@shared/schema";
 import { z } from "zod";
+import pkg from 'pg';
+const { Pool } = pkg;
+import * as fs from 'fs';
+import * as path from 'path';
+
+// We'll use pg directly since we're in an ESM context
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
+});
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Serve our custom index.html file for both / and /competition
+  app.get('/', (req, res) => {
+    res.sendFile('index.html', { root: process.cwd() });
+  });
+  
+  app.get('/competition', (req, res) => {
+    res.sendFile('index.html', { root: process.cwd() });
+  });
+  
   // Setup authentication routes
   setupAuth(app);
 
@@ -26,14 +45,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
     
     try {
-      const validatedData = insertAdViewSchema.parse({ userId: req.user.id });
+      const userId = req.user.id;
+      
+      // First, store in the storage system for compatibility with existing code
+      const validatedData = insertAdViewSchema.parse({ userId });
       const adView = await storage.createAdView(validatedData);
+      
+      // Then, record in the competition database
+      try {
+        // Insert ad_view record
+        const result = await pool.query(`
+          INSERT INTO ad_views (user_id)
+          VALUES ($1)
+          RETURNING id, user_id, viewed_at
+        `, [userId]);
+        
+        // Get the active competition
+        const competitionResult = await pool.query(`
+          SELECT id FROM competitions 
+          WHERE is_active = TRUE AND end_date > CURRENT_TIMESTAMP
+          LIMIT 1
+        `);
+        
+        if (competitionResult.rows.length > 0) {
+          const competitionId = competitionResult.rows[0].id;
+          
+          // Check if user is already in the competition
+          const participantCheck = await pool.query(`
+            SELECT * FROM competition_participants
+            WHERE competition_id = $1 AND user_id = $2
+          `, [competitionId, userId]);
+          
+          if (participantCheck.rows.length > 0) {
+            // Update existing participant
+            await pool.query(`
+              UPDATE competition_participants
+              SET ads_watched = ads_watched + 1, last_active = CURRENT_TIMESTAMP
+              WHERE competition_id = $1 AND user_id = $2
+            `, [competitionId, userId]);
+          } else {
+            // Add new participant
+            await pool.query(`
+              INSERT INTO competition_participants (competition_id, user_id, ads_watched)
+              VALUES ($1, $2, 1)
+            `, [competitionId, userId]);
+          }
+        }
+      } catch (dbError) {
+        console.error('Error updating competition database:', dbError);
+        // Continue with the response since we already have the adView from storage
+      }
+      
       res.status(201).json(adView);
     } catch (err) {
-      if (err instanceof z.ZodError) {
-        return res.status(400).json({ message: err.errors[0].message });
-      }
-      res.status(400).json({ message: "Invalid request" });
+      console.error('Error recording ad view:', err);
+      res.status(500).json({ message: "Server error" });
     }
   });
 
@@ -87,6 +153,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: err.errors[0].message });
       }
       res.status(400).json({ message: "Invalid request" });
+    }
+  });
+
+  // Get current active competition
+  app.get("/api/competition", async (req, res) => {
+    try {
+      const result = await pool.query(`
+        SELECT * FROM competitions 
+        WHERE is_active = TRUE AND end_date > CURRENT_TIMESTAMP
+        LIMIT 1
+      `);
+      
+      if (result.rows.length > 0) {
+        res.json(result.rows[0]);
+      } else {
+        res.json(null);
+      }
+    } catch (err) {
+      console.error('Error getting competition:', err);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
+  // Get leaderboard
+  app.get("/api/leaderboard", async (req, res) => {
+    try {
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : 100;
+      
+      // Get current competition
+      const competitionResult = await pool.query(`
+        SELECT id FROM competitions 
+        WHERE is_active = TRUE AND end_date > CURRENT_TIMESTAMP
+        LIMIT 1
+      `);
+      
+      if (competitionResult.rows.length === 0) {
+        return res.json([]);
+      }
+      
+      const competitionId = competitionResult.rows[0].id;
+      
+      // Get top participants who have watched at least 5 ads
+      const result = await pool.query(`
+        SELECT cp.*, u.username, u.email
+        FROM competition_participants cp
+        JOIN users u ON cp.user_id = u.id
+        WHERE cp.competition_id = $1 AND cp.ads_watched >= 5
+        ORDER BY cp.ads_watched DESC
+        LIMIT $2
+      `, [competitionId, limit]);
+      
+      res.json(result.rows);
+    } catch (err) {
+      console.error('Error getting leaderboard:', err);
+      res.status(500).json({ message: "Server error" });
     }
   });
 

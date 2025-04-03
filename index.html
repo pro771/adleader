@@ -3,1055 +3,1154 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ad Rewards - Weekly Ad Watching Competition</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Ad Watching Competition - Win Prizes!</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-light: #6366f1;
+      --primary-dark: #3730a3;
+      --secondary: #10b981;
+      --dark: #1e293b;
+      --light: #f8fafc;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --success: #10b981;
+      --gold: #f59e0b;
+      --silver: #94a3b8;
+      --bronze: #b45309;
+    }
+    
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f9fafb;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: #f1f5f9;
+      color: var(--dark);
+      min-height: 100vh;
     }
+    
+    .navbar {
+      background-color: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .navbar-brand {
+      font-weight: 700;
+      color: var(--primary);
+    }
+    
+    .btn-primary {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      border-color: var(--primary-dark);
+    }
+    
+    .btn-success {
+      background-color: var(--success);
+      border-color: var(--success);
+    }
+    
+    .container {
+      max-width: 1200px;
+    }
+    
+    .card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+    }
+    
+    .card-title {
+      font-weight: 700;
+    }
+    
+    .hero-section {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 3rem 0;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+    }
+    
+    .hero-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+    }
+    
+    .gradient-text {
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: bold;
+    }
+    
     .ad-container {
-      aspect-ratio: 16/9;
-      position: relative;
+      width: 100%;
+      height: 300px;
+      background-color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
       overflow: hidden;
+      position: relative;
     }
+    
+    .ad-placeholder {
+      font-size: 1.2rem;
+      color: #64748b;
+    }
+    
+    .progress-container {
+      margin: 2rem 0;
+    }
+    
+    .progress {
+      height: 10px;
+      border-radius: 5px;
+    }
+    
     .progress-bar {
-      transition: width 0.1s;
+      background-color: var(--primary);
     }
-    .trophy-gold {
-      color: #FFD700;
+    
+    .progress-text {
+      margin-top: 0.5rem;
+      font-weight: 600;
     }
-    .trophy-silver {
-      color: #C0C0C0;
+    
+    .leaderboard-container {
+      margin-top: 2rem;
     }
-    .trophy-bronze {
-      color: #CD7F32;
+    
+    .leaderboard-title {
+      font-weight: 700;
+      margin-bottom: 1.5rem;
     }
-    .leaderboard-item:nth-child(even) {
-      background-color: rgba(249, 250, 251, 0.5);
+    
+    .leaderboard-table th {
+      background-color: #f8fafc;
+      font-weight: 600;
     }
-    .leaderboard-item:hover {
+    
+    .leaderboard-table .rank {
+      font-weight: 700;
+      width: 60px;
+    }
+    
+    .leaderboard-table .top-1 {
+      color: var(--gold);
+    }
+    
+    .leaderboard-table .top-2 {
+      color: var(--silver);
+    }
+    
+    .leaderboard-table .top-3 {
+      color: var(--bronze);
+    }
+    
+    .user-highlight {
       background-color: rgba(79, 70, 229, 0.1);
+      font-weight: 700;
     }
+    
+    .countdown-container {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    
     .countdown {
-      font-variant-numeric: tabular-nums;
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .countdown-item {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      padding: 10px;
+      min-width: 80px;
+      text-align: center;
+    }
+    
+    .countdown-number {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    
+    .countdown-label {
+      font-size: 0.8rem;
+      color: #64748b;
+      text-transform: uppercase;
+    }
+    
+    .login-container, .register-container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    .form-control {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+    }
+    
+    .form-label {
+      font-weight: 600;
+    }
+    
+    /* Media queries */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+      
+      .countdown-item {
+        min-width: 60px;
+      }
+      
+      .countdown-number {
+        font-size: 1.4rem;
+      }
     }
   </style>
 </head>
 <body>
-  <div id="app" class="min-h-screen flex flex-col">
-    <!-- Header -->
-    <header class="bg-white shadow">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-        <div class="flex items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="12" y1="8" x2="12" y2="12"></line>
-            <line x1="12" y1="16" x2="12.01" y2="16"></line>
-          </svg>
-          <h1 class="ml-2 text-2xl font-bold text-gray-900">AdRewards</h1>
-        </div>
-        
-        <div id="auth-buttons">
-          <button onclick="showLoginForm()" class="text-indigo-600 hover:text-indigo-800 transition-colors font-medium">
-            Login
-          </button>
-          <button onclick="showRegisterForm()" class="ml-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors inline-block">
-            Register
-          </button>
-        </div>
-        
-        <div id="user-info" class="hidden flex items-center space-x-4">
-          <span id="user-email" class="text-gray-700 hidden md:inline-block">user@example.com</span>
-          <button onclick="goToAdmin()" class="text-indigo-600 hover:text-indigo-800 transition-colors font-medium">
-            Admin
-          </button>
-          <button onclick="logout()" class="text-gray-600 hover:text-gray-800">
-            Logout
-          </button>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+      <a class="navbar-brand" href="#"><i class="fas fa-award me-2"></i>AdCompetition</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item" id="nav-home">
+            <a class="nav-link" href="#" onclick="showPage('home')">Home</a>
+          </li>
+          <li class="nav-item" id="nav-leaderboard">
+            <a class="nav-link" href="#" onclick="showPage('leaderboard')">Leaderboard</a>
+          </li>
+          <li class="nav-item" id="nav-how-it-works">
+            <a class="nav-link" href="#" onclick="showPage('how-it-works')">How It Works</a>
+          </li>
+          <li class="nav-item user-auth" id="nav-login">
+            <a class="nav-link" href="#" onclick="showPage('login')">Log In</a>
+          </li>
+          <li class="nav-item user-auth" id="nav-register">
+            <a class="nav-link" href="#" onclick="showPage('register')">Register</a>
+          </li>
+          <li class="nav-item user-logged-in d-none" id="nav-profile">
+            <a class="nav-link" href="#" onclick="showPage('profile')">My Profile</a>
+          </li>
+          <li class="nav-item user-logged-in d-none" id="nav-logout">
+            <a class="nav-link" href="#" onclick="logout()">Log Out</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container py-5">
+    <!-- Home Page -->
+    <div id="home-page" class="page">
+      <div class="hero-section p-4 p-md-5">
+        <div class="row align-items-center">
+          <div class="col-md-7">
+            <h1 class="hero-title">Weekly Ad Competition</h1>
+            <p class="hero-subtitle">Watch ads, climb the leaderboard, win prizes every week!</p>
+            <div id="home-cta">
+              <!-- Will be populated dynamically based on login status -->
+            </div>
+          </div>
+          <div class="col-md-5">
+            <div class="countdown-container">
+              <h4>Current Competition Ends In:</h4>
+              <div class="countdown">
+                <div class="countdown-item">
+                  <div id="days" class="countdown-number">0</div>
+                  <div class="countdown-label">Days</div>
+                </div>
+                <div class="countdown-item">
+                  <div id="hours" class="countdown-number">0</div>
+                  <div class="countdown-label">Hours</div>
+                </div>
+                <div class="countdown-item">
+                  <div id="minutes" class="countdown-number">0</div>
+                  <div class="countdown-label">Minutes</div>
+                </div>
+                <div class="countdown-item">
+                  <div id="seconds" class="countdown-number">0</div>
+                  <div class="countdown-label">Seconds</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </header>
+      
+      <div class="row mb-5">
+        <div class="col-md-4 mb-4">
+          <div class="card h-100 p-4">
+            <div class="card-body text-center">
+              <i class="fas fa-eye fa-3x mb-3" style="color: var(--primary);"></i>
+              <h3 class="card-title mb-3">Watch Ads</h3>
+              <p class="card-text">Watch a minimum of 5 ads to qualify for our weekly competition. The more ads you watch, the higher you'll rank!</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="card h-100 p-4">
+            <div class="card-body text-center">
+              <i class="fas fa-trophy fa-3x mb-3" style="color: var(--gold);"></i>
+              <h3 class="card-title mb-3">Climb the Ranks</h3>
+              <p class="card-text">Compete with other users to reach the top of our leaderboard. The top 100 users are displayed for everyone to see!</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="card h-100 p-4">
+            <div class="card-body text-center">
+              <i class="fas fa-gift fa-3x mb-3" style="color: var(--success);"></i>
+              <h3 class="card-title mb-3">Win Prizes</h3>
+              <p class="card-text">At the end of each week, the user who watched the most ads will be announced as the winner and receive exciting prizes!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="text-center">
+        <h2 class="mb-4">Top Competitors This Week</h2>
+        <div class="table-responsive">
+          <table class="table table-hover leaderboard-table" id="home-leaderboard">
+            <thead>
+              <tr>
+                <th class="rank">Rank</th>
+                <th>Username</th>
+                <th>Ads Watched</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Will be populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+        <button class="btn btn-primary mt-3" onclick="showPage('leaderboard')">View Full Leaderboard</button>
+      </div>
+    </div>
     
-    <!-- Main Content -->
-    <main class="flex-grow">
-      <!-- Auth Page -->
-      <div id="auth-page" class="max-w-6xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
-        <div class="grid md:grid-cols-2 gap-8 items-center">
-          <!-- Auth Form -->
-          <div class="bg-white p-6 rounded-lg shadow-md w-full">
-            <div class="text-center mb-8">
-              <h2 class="text-2xl font-bold text-gray-900 mb-2">Welcome to AdRewards</h2>
-              <p class="text-gray-600">Watch ads. Earn rewards. It's that simple.</p>
-            </div>
-            
-            <div class="tabs">
-              <div class="grid grid-cols-2 gap-2 mb-6">
-                <button onclick="showLoginForm()" id="login-tab" class="py-2 font-medium rounded text-center bg-indigo-600 text-white">Login</button>
-                <button onclick="showRegisterForm()" id="register-tab" class="py-2 font-medium rounded text-center bg-gray-200 text-gray-700">Register</button>
-              </div>
-              
-              <!-- Login Form -->
-              <form id="login-form" onsubmit="login(event)" class="space-y-4">
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
-                  <input type="text" id="login-username" placeholder="Enter your username" required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                </div>
-                
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                  <input type="password" id="login-password" placeholder="Enter your password" required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                </div>
-                
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors">
-                  Log In
-                </button>
-                
-                <div class="text-center text-sm text-gray-600 mt-4">
-                  Don't have an account?
-                  <button type="button" onclick="showRegisterForm()" class="text-indigo-600 hover:text-indigo-800">
-                    Register here
-                  </button>
-                </div>
-              </form>
-              
-              <!-- Register Form -->
-              <form id="register-form" onsubmit="register(event)" class="space-y-4 hidden">
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
-                  <input type="text" id="register-username" placeholder="Choose a username" required minlength="3"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                </div>
-                
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                  <input type="email" id="register-email" placeholder="Enter your email" required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                </div>
-                
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                  <input type="password" id="register-password" placeholder="Create a password" required minlength="6"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                </div>
-                
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
-                  <input type="password" id="register-confirm-password" placeholder="Confirm your password" required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                </div>
-                
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors">
-                  Register
-                </button>
-                
-                <div class="text-center text-sm text-gray-600 mt-4">
-                  Already have an account?
-                  <button type="button" onclick="showLoginForm()" class="text-indigo-600 hover:text-indigo-800">
-                    Login here
-                  </button>
-                </div>
-              </form>
-            </div>
+    <!-- Leaderboard Page -->
+    <div id="leaderboard-page" class="page d-none">
+      <h1 class="mb-4">Weekly Competition Leaderboard</h1>
+      
+      <div class="countdown-container mb-4">
+        <h4>Current Competition Ends In:</h4>
+        <div class="countdown">
+          <div class="countdown-item">
+            <div id="leaderboard-days" class="countdown-number">0</div>
+            <div class="countdown-label">Days</div>
           </div>
-          
-          <!-- Hero Section -->
-          <div class="flex flex-col space-y-6">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-900">
-              Ad Watching <span class="text-indigo-600">Weekly Competition</span>
-            </h1>
-            
-            <p class="text-gray-600">
-              Join our weekly competition by watching ads. Top viewers get featured on our leaderboard with prizes for the most engaged participants!
-            </p>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-              <div class="flex items-start space-x-3">
-                <div class="bg-indigo-100 p-2 rounded-full">
-                  <svg class="h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 class="font-medium text-gray-900">Simple Process</h3>
-                  <p class="text-sm text-gray-600">Watch 4 ads. Get $10. No tricks.</p>
-                </div>
-              </div>
-              
-              <div class="flex items-start space-x-3">
-                <div class="bg-indigo-100 p-2 rounded-full">
-                  <svg class="h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 class="font-medium text-gray-900">Secure Rewards</h3>
-                  <p class="text-sm text-gray-600">Your data and rewards are safe with us.</p>
-                </div>
-              </div>
-              
-              <div class="flex items-start space-x-3">
-                <div class="bg-indigo-100 p-2 rounded-full">
-                  <svg class="h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 class="font-medium text-gray-900">Instant Payout</h3>
-                  <p class="text-sm text-gray-600">Get your reward sent directly to your email.</p>
-                </div>
-              </div>
-              
-              <div class="flex items-start space-x-3">
-                <div class="bg-indigo-100 p-2 rounded-full">
-                  <svg class="h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 class="font-medium text-gray-900">Quick & Easy</h3>
-                  <p class="text-sm text-gray-600">Complete all 4 ads in under 10 minutes.</p>
-                </div>
-              </div>
-            </div>
+          <div class="countdown-item">
+            <div id="leaderboard-hours" class="countdown-number">0</div>
+            <div class="countdown-label">Hours</div>
+          </div>
+          <div class="countdown-item">
+            <div id="leaderboard-minutes" class="countdown-number">0</div>
+            <div class="countdown-label">Minutes</div>
+          </div>
+          <div class="countdown-item">
+            <div id="leaderboard-seconds" class="countdown-number">0</div>
+            <div class="countdown-label">Seconds</div>
           </div>
         </div>
       </div>
       
-      <!-- Home Page -->
-      <div id="home-page" class="hidden max-w-4xl mx-auto my-8 px-4">
-        <!-- Progress Tracker -->
-        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
-          <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-semibold text-gray-900">Your Competition Progress</h2>
-            <div class="flex items-center">
-              <span class="text-sm font-medium text-gray-700 mr-2">Ads Watched:</span>
-              <span id="ads-watched" class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-indigo-100 text-indigo-600 font-medium">
-                0
-              </span>
-              <span class="text-sm font-medium text-gray-700 mx-2">/</span>
-              <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-gray-100 text-gray-800 font-medium">
-                5
-              </span>
-            </div>
-          </div>
-          
-          <div class="w-full bg-gray-200 h-2 rounded-full mb-4">
-            <div id="progress-bar" class="progress-bar bg-indigo-600 h-2 rounded-full" style="width: 0%"></div>
-          </div>
-          
-          <div class="flex justify-between items-center">
-            <p class="text-sm text-gray-600">
-              Watch at least 5 ads to enter the weekly competition. Top viewers appear on the leaderboard!
-            </p>
-            <div id="competition-timer" class="flex items-center text-sm font-medium text-gray-700">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span class="countdown" id="competition-countdown">6d 23h 59m</span>
-            </div>
-          </div>
+      <div class="leaderboard-container">
+        <div class="alert alert-primary mb-4">
+          <i class="fas fa-info-circle me-2"></i> You need to watch at least 5 ads to appear on the leaderboard.
         </div>
         
-        <!-- Ad Viewer -->
-        <div id="ad-viewer" class="bg-white rounded-lg shadow-md p-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-4">Watch Ad to Earn Rewards</h2>
-          <p class="text-gray-600 mb-6">
-            Click the button below to watch an ad. Each completed ad brings you closer to claiming your reward.
-          </p>
-          
-          <!-- Ad Container -->
-          <div class="ad-container bg-gray-100 rounded-lg mb-6 overflow-hidden">
-            <!-- Ready State -->
-            <div id="ad-ready" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <p class="text-gray-500">Your ad is ready to play. Click the button below to start.</p>
-            </div>
-            
-            <!-- Loading State -->
-            <div id="ad-loading" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center hidden">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 mb-4 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-              <p class="text-gray-500">Loading your ad...</p>
-            </div>
-            
-            <!-- Playing State -->
-            <div id="ad-playing" class="absolute inset-0 hidden">
-              <div class="w-full h-full bg-gray-800 flex items-center justify-center">
-                <div class="text-white text-center p-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <p class="text-xl mb-2">Ad is playing...</p>
-                  <p class="text-sm text-gray-300 mb-4">Please wait while the ad completes</p>
-                  <div class="w-full bg-gray-600 h-2 rounded-full overflow-hidden">
-                    <div id="ad-progress" class="bg-indigo-500 h-full transition-all" style="width: 0%"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Completed State -->
-            <div id="ad-completed" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-green-500 bg-opacity-10 hidden">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-green-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <p class="text-green-500 font-medium text-lg">Ad completed successfully!</p>
-              <p class="text-gray-500 mt-2">Your progress has been updated.</p>
-            </div>
-          </div>
-          
-          <div class="flex justify-center">
-            <button id="ad-button" onclick="playAd()" class="flex items-center bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-              </svg>
-              Watch Ad
-            </button>
-          </div>
+        <div class="table-responsive">
+          <table class="table table-hover leaderboard-table" id="full-leaderboard">
+            <thead>
+              <tr>
+                <th class="rank">Rank</th>
+                <th>Username</th>
+                <th>Ads Watched</th>
+                <th>Last Active</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Will be populated dynamically -->
+            </tbody>
+          </table>
         </div>
-        
-        <!-- Reward Claim -->
-        <div id="reward-claim" class="hidden bg-white mt-8 rounded-lg shadow-md p-6 border-2 border-green-500">
-          <div class="text-center">
-            <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-green-100 text-green-500 mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <h2 class="text-2xl font-bold text-gray-900 mb-2">Congratulations!</h2>
-            <p class="text-gray-600 mb-6">You've watched 5 ads and qualified for the competition and reward!</p>
-            
-            <form id="claim-form" onsubmit="claimReward(event)" class="max-w-md mx-auto space-y-4">
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Your Email</label>
-                <input type="email" id="claim-email" required
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
-                <p class="text-xs text-gray-500 mt-1">We'll send your reward to this email address.</p>
-              </div>
-              
-              <div class="flex items-start space-x-3">
-                <input type="checkbox" id="terms-agreed" required
-                  class="mt-1 h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
-                <label for="terms-agreed" class="text-sm text-gray-700">
-                  I agree to the terms and conditions
-                </label>
-              </div>
-              
-              <button type="submit" class="w-full mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md transition-colors">
-                Claim Your Reward
-              </button>
-            </form>
-          </div>
-        </div>
-        
-        <!-- Success Message -->
-        <div id="reward-success" class="hidden bg-white mt-8 rounded-lg shadow-md p-6 border-2 border-green-500 text-center">
-          <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-green-100 text-green-500 mb-4">
-            <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
-          </div>
-          <h2 class="text-2xl font-bold text-gray-900 mb-2">Reward Successfully Claimed!</h2>
-          <p class="text-gray-600 mb-2">Your $10 reward has been processed.</p>
-          <p class="text-gray-600">We've sent the details to: <strong id="reward-email">user@example.com</strong></p>
+      </div>
+    </div>
+    
+    <!-- How It Works Page -->
+    <div id="how-it-works-page" class="page d-none">
+      <h1 class="mb-4">How It Works</h1>
+      <div class="card mb-4">
+        <div class="card-body">
+          <h2 class="mb-3">Weekly Competition Rules</h2>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <i class="fas fa-check-circle me-2" style="color: var(--success);"></i>
+              Watch a minimum of 5 ads to qualify for the leaderboard
+            </li>
+            <li class="list-group-item">
+              <i class="fas fa-check-circle me-2" style="color: var(--success);"></i>
+              Each ad view is counted and recorded in our secure database
+            </li>
+            <li class="list-group-item">
+              <i class="fas fa-check-circle me-2" style="color: var(--success);"></i>
+              The competition resets every Sunday at midnight
+            </li>
+            <li class="list-group-item">
+              <i class="fas fa-check-circle me-2" style="color: var(--success);"></i>
+              The user who watched the most ads during the week wins
+            </li>
+            <li class="list-group-item">
+              <i class="fas fa-check-circle me-2" style="color: var(--success);"></i>
+              Winners will be contacted via email for prize distribution
+            </li>
+            <li class="list-group-item">
+              <i class="fas fa-check-circle me-2" style="color: var(--success);"></i>
+              Multiple accounts per person are not allowed
+            </li>
+          </ul>
         </div>
       </div>
       
-      <!-- Admin Page (Leaderboard) -->
-      <div id="admin-page" class="hidden max-w-6xl mx-auto my-8 px-4">
-        <div class="bg-white rounded-lg shadow-md">
-          <div class="p-6 flex flex-row items-center justify-between border-b">
-            <div>
-              <h2 class="text-2xl font-bold text-gray-900">Weekly Ad-Viewing Competition</h2>
-              <p class="text-gray-500 mt-1">Current standings - Top 100 viewers</p>
-            </div>
-            
-            <div class="flex items-center space-x-4">
-              <div class="flex items-center text-sm font-medium text-gray-700">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span class="countdown" id="admin-competition-countdown">6d 23h 59m</span>
-              </div>
-              <button onclick="exportLeaderboardCSV()" id="export-button" class="flex items-center bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-                Export to CSV
-              </button>
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <h3 class="card-title mb-3">Getting Started</h3>
+              <ol>
+                <li class="mb-2">Create an account with a valid email address</li>
+                <li class="mb-2">Log in to your account</li>
+                <li class="mb-2">Navigate to your profile page</li>
+                <li class="mb-2">Click the "Watch Ads" button</li>
+                <li class="mb-2">Complete watching the ad (30 seconds)</li>
+                <li>Your progress will automatically be tracked</li>
+              </ol>
             </div>
           </div>
-          
-          <div class="p-6">
-            <div class="mb-6 bg-indigo-50 p-4 rounded-lg border border-indigo-100">
-              <h3 class="font-semibold text-indigo-800 mb-2">Competition Rules</h3>
-              <ul class="text-sm text-indigo-700 space-y-1">
-                <li>• Watch at least 5 ads to enter the weekly competition</li>
-                <li>• The more ads you watch, the higher your ranking</li>
-                <li>• Competition resets weekly, with winners announced each Sunday</li>
-                <li>• Top 3 ad viewers receive special prizes!</li>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <h3 class="card-title mb-3">Prize Information</h3>
+              <p>Every week, we announce winners based on their position on the leaderboard:</p>
+              <ul>
+                <li class="mb-2"><strong>1st Place:</strong> Main prize of the week</li>
+                <li class="mb-2"><strong>2nd Place:</strong> Runner-up prize</li>
+                <li class="mb-2"><strong>3rd Place:</strong> Smaller prize</li>
+                <li>All participants who watched at least 5 ads are eligible for random bonus prizes</li>
               </ul>
-            </div>
-            
-            <div id="no-users" class="flex flex-col items-center justify-center py-10 text-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-              </svg>
-              <h3 class="text-xl font-medium text-gray-700 mb-2">No Participants Yet</h3>
-              <p class="text-gray-500 max-w-md">
-                Be the first to enter the competition by watching at least 5 ads!
-              </p>
-            </div>
-            
-            <div id="leaderboard" class="hidden">
-              <div class="flex flex-wrap gap-4 mb-6">
-                <!-- Top 3 Winners -->
-                <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 rounded-lg p-4 flex-1 min-w-[250px]">
-                  <div class="flex items-center">
-                    <div class="trophy-gold mr-4 text-3xl">🏆</div>
-                    <div>
-                      <h4 class="font-bold" id="first-place-name">-</h4>
-                      <p class="text-gray-600 text-sm"><span id="first-place-ads">0</span> ads watched</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 rounded-lg p-4 flex-1 min-w-[250px]">
-                  <div class="flex items-center">
-                    <div class="trophy-silver mr-4 text-3xl">🥈</div>
-                    <div>
-                      <h4 class="font-bold" id="second-place-name">-</h4>
-                      <p class="text-gray-600 text-sm"><span id="second-place-ads">0</span> ads watched</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 rounded-lg p-4 flex-1 min-w-[250px]">
-                  <div class="flex items-center">
-                    <div class="trophy-bronze mr-4 text-3xl">🥉</div>
-                    <div>
-                      <h4 class="font-bold" id="third-place-name">-</h4>
-                      <p class="text-gray-600 text-sm"><span id="third-place-ads">0</span> ads watched</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="bg-white border rounded-lg overflow-hidden">
-                <div class="overflow-x-auto">
-                  <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                      <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16">Rank</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ads Watched</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Active</th>
-                      </tr>
-                    </thead>
-                    <tbody id="leaderboard-tbody" class="bg-white divide-y divide-gray-200">
-                      <!-- Leaderboard rows will go here -->
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              
-              <div class="mt-6 text-center text-sm text-gray-500">
-                <p>Total participants: <span id="total-users">0</span></p>
-                <p class="mt-1">Competition ends in: <span class="countdown" id="competition-end-time">6d 23h 59m</span></p>
-              </div>
+              <p>Prizes vary each week and will be announced on the homepage.</p>
             </div>
           </div>
         </div>
       </div>
-    </main>
+      
+      <div class="text-center mt-4">
+        <button class="btn btn-primary btn-lg" onclick="showPage('register')">Sign Up Now</button>
+        <p class="mt-3">Already have an account? <a href="#" onclick="showPage('login')">Log In</a></p>
+      </div>
+    </div>
     
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-gray-300 py-8 mt-12">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div>
-            <h3 class="text-lg font-semibold mb-4 flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              AdRewards
-            </h3>
-            <p class="text-gray-400 text-sm">Watch ads. Earn rewards. It's that simple.</p>
+    <!-- Login Page -->
+    <div id="login-page" class="page d-none">
+      <div class="login-container">
+        <h1 class="mb-4 text-center">Log In</h1>
+        <div class="card p-4">
+          <div class="card-body">
+            <div id="login-alert" class="alert d-none"></div>
+            <form id="login-form">
+              <div class="mb-3">
+                <label for="login-username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="login-username" required>
+              </div>
+              <div class="mb-3">
+                <label for="login-password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="login-password" required>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Log In</button>
+            </form>
+            <p class="mt-3 text-center">Don't have an account? <a href="#" onclick="showPage('register')">Register</a></p>
           </div>
-          
-          <div>
-            <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
-            <ul class="space-y-2 text-sm">
-              <li>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                  How It Works
-                </a>
-              </li>
-              <li>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                  Rewards
-                </a>
-              </li>
-              <li>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                  FAQ
-                </a>
-              </li>
-              <li>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                  Contact Us
-                </a>
-              </li>
-            </ul>
-          </div>
-          
-          <div>
-            <h3 class="text-lg font-semibold mb-4">Legal</h3>
-            <ul class="space-y-2 text-sm">
-              <li>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                  Terms of Service
-                </a>
-              </li>
-              <li>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                  Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                  Cookie Policy
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-400">
-          <p>&copy; 2025 AdRewards. All rights reserved.</p>
         </div>
       </div>
-    </footer>
+    </div>
+    
+    <!-- Register Page -->
+    <div id="register-page" class="page d-none">
+      <div class="register-container">
+        <h1 class="mb-4 text-center">Create an Account</h1>
+        <div class="card p-4">
+          <div class="card-body">
+            <div id="register-alert" class="alert d-none"></div>
+            <form id="register-form">
+              <div class="mb-3">
+                <label for="register-username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="register-username" required>
+              </div>
+              <div class="mb-3">
+                <label for="register-email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="register-email" required>
+              </div>
+              <div class="mb-3">
+                <label for="register-password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="register-password" required>
+              </div>
+              <div class="mb-3">
+                <label for="register-confirm-password" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="register-confirm-password" required>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Register</button>
+            </form>
+            <p class="mt-3 text-center">Already have an account? <a href="#" onclick="showPage('login')">Log In</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Profile Page -->
+    <div id="profile-page" class="page d-none">
+      <h1 class="mb-4">My Profile</h1>
+      <div class="row">
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h3 class="card-title mb-3">Account Information</h3>
+              <p><strong>Username:</strong> <span id="profile-username"></span></p>
+              <p><strong>Email:</strong> <span id="profile-email"></span></p>
+              <p><strong>Account Created:</strong> <span id="profile-created"></span></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-8 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h3 class="card-title mb-3">Your Progress</h3>
+              <div class="progress-container">
+                <div class="progress">
+                  <div id="profile-progress" class="progress-bar" role="progressbar"></div>
+                </div>
+                <p class="progress-text">You've watched <span id="profile-ads-watched">0</span> ads this week.</p>
+                <p class="mt-2"><small>You need to watch at least 5 ads to qualify for the leaderboard.</small></p>
+              </div>
+              <div class="text-center">
+                <button id="watch-ad-btn" class="btn btn-primary">Watch Ad</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title mb-3">Your Leaderboard Position</h3>
+          <div id="profile-not-qualified" class="alert alert-warning d-none">
+            <i class="fas fa-exclamation-triangle me-2"></i> You need to watch at least 5 ads to appear on the leaderboard.
+          </div>
+          <div id="profile-qualified" class="d-none">
+            <div class="alert alert-success">
+              <i class="fas fa-check-circle me-2"></i> You're currently ranked <span id="profile-rank">-</span> on the leaderboard.
+            </div>
+            <p>Keep watching ads to improve your rank and increase your chances of winning!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Ad Viewer Modal -->
+    <div class="modal fade" id="ad-modal" tabindex="-1" aria-labelledby="ad-modal-label" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ad-modal-label">Watch Advertisement</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="ad-container">
+              <div id="ad-content">
+                <div class="ad-placeholder text-center">
+                  <div id="ad-loading">
+                    <div class="spinner-border text-primary mb-3" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p>Loading advertisement...</p>
+                  </div>
+                  <div id="ad-playing" class="d-none">
+                    <p>Advertisement is playing...</p>
+                    <div class="mt-3">
+                      <div class="progress" style="height: 5px;">
+                        <div id="ad-progress" class="progress-bar" role="progressbar" style="width: 0%"></div>
+                      </div>
+                      <p class="mt-2"><small>Please wait <span id="ad-timer">30</span> seconds</small></p>
+                    </div>
+                  </div>
+                  <div id="ad-completed" class="d-none">
+                    <i class="fas fa-check-circle fa-3x mb-3 text-success"></i>
+                    <p>Advertisement completed!</p>
+                    <p>Thank you for watching.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="ad-completed-btn" disabled>Confirm Completion</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <script>
-    // Store the user data
-    let currentUser = null;
-    let adsWatched = 0;
-    let adStatus = 'ready';
-    let qualifiedUsers = [];
-    let participants = [];
-    let competitionEndDate = new Date(); // Today
-    competitionEndDate.setHours(23, 59, 59, 999);
-    competitionEndDate.setDate(competitionEndDate.getDate() + 7); // Next week
+  <!-- Footer -->
+  <footer class="bg-light py-4 mt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <p class="mb-0">&copy; 2023 AdCompetition. All rights reserved.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <a href="#" class="text-decoration-none text-muted me-3">Privacy Policy</a>
+          <a href="#" class="text-decoration-none text-muted me-3">Terms of Service</a>
+          <a href="#" class="text-decoration-none text-muted">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Global variables
+    let currentUser = null;
+    let adModal = null;
+    let adTimer = null;
+    let adInterval = null;
+    let competitionEndDate = null;
+    let countdownInterval = null;
+    
+    // Initialize when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Bootstrap components
+      adModal = new bootstrap.Modal(document.getElementById('ad-modal'));
+      
+      // Setup form event listeners
+      document.getElementById('login-form').addEventListener('submit', handleLogin);
+      document.getElementById('register-form').addEventListener('submit', handleRegister);
+      document.getElementById('watch-ad-btn').addEventListener('click', startAdViewing);
+      document.getElementById('ad-completed-btn').addEventListener('click', completeAdView);
+      
+      // Check if user is logged in
+      checkAuthStatus();
+      
+      // Load competition data and update UI
+      loadCompetitionData();
+      
+      // Start with home page
+      showPage('home');
+    });
+    
     // Page navigation
-    function showPage(pageId) {
+    function showPage(pageName) {
       // Hide all pages
-      document.querySelectorAll('#auth-page, #home-page, #admin-page').forEach(page => {
-        page.classList.add('hidden');
+      document.querySelectorAll('.page').forEach(page => {
+        page.classList.add('d-none');
       });
       
-      // Show the requested page
-      document.getElementById(pageId).classList.remove('hidden');
+      // Show the selected page
+      document.getElementById(pageName + '-page').classList.remove('d-none');
+      
+      // Update navigation
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      document.getElementById('nav-' + pageName)?.classList.add('active');
+      
+      // Special handling for each page
+      if (pageName === 'home') {
+        updateHomeCTA();
+        loadTopLeaderboard();
+      } else if (pageName === 'leaderboard') {
+        loadFullLeaderboard();
+      } else if (pageName === 'profile' && currentUser) {
+        loadUserProfile();
+      } else if ((pageName === 'login' || pageName === 'register') && currentUser) {
+        // Redirect to home if already logged in
+        showPage('home');
+      }
+      
+      // Scroll to top
+      window.scrollTo(0, 0);
     }
-
-    // Show login form
-    function showLoginForm() {
-      document.getElementById('login-form').classList.remove('hidden');
-      document.getElementById('register-form').classList.add('hidden');
-      document.getElementById('login-tab').classList.add('bg-indigo-600', 'text-white');
-      document.getElementById('login-tab').classList.remove('bg-gray-200', 'text-gray-700');
-      document.getElementById('register-tab').classList.add('bg-gray-200', 'text-gray-700');
-      document.getElementById('register-tab').classList.remove('bg-indigo-600', 'text-white');
+    
+    // Authentication functions
+    async function checkAuthStatus() {
+      try {
+        const response = await fetch('/api/user');
+        if (response.ok) {
+          currentUser = await response.json();
+          updateAuthUI(true);
+        } else {
+          currentUser = null;
+          updateAuthUI(false);
+        }
+      } catch (error) {
+        console.error('Error checking auth status:', error);
+        currentUser = null;
+        updateAuthUI(false);
+      }
     }
-
-    // Show register form
-    function showRegisterForm() {
-      document.getElementById('login-form').classList.add('hidden');
-      document.getElementById('register-form').classList.remove('hidden');
-      document.getElementById('login-tab').classList.add('bg-gray-200', 'text-gray-700');
-      document.getElementById('login-tab').classList.remove('bg-indigo-600', 'text-white');
-      document.getElementById('register-tab').classList.add('bg-indigo-600', 'text-white');
-      document.getElementById('register-tab').classList.remove('bg-gray-200', 'text-gray-700');
+    
+    function updateAuthUI(isLoggedIn) {
+      if (isLoggedIn) {
+        document.querySelectorAll('.user-auth').forEach(el => {
+          el.classList.add('d-none');
+        });
+        document.querySelectorAll('.user-logged-in').forEach(el => {
+          el.classList.remove('d-none');
+        });
+      } else {
+        document.querySelectorAll('.user-auth').forEach(el => {
+          el.classList.remove('d-none');
+        });
+        document.querySelectorAll('.user-logged-in').forEach(el => {
+          el.classList.add('d-none');
+        });
+      }
+      
+      updateHomeCTA();
     }
-
-    // Login function
-    function login(e) {
-      e.preventDefault();
+    
+    function updateHomeCTA() {
+      const homeCta = document.getElementById('home-cta');
+      if (currentUser) {
+        homeCta.innerHTML = `
+          <button class="btn btn-light btn-lg me-2" onclick="showPage('profile')">My Profile</button>
+          <button class="btn btn-success btn-lg" onclick="startAdViewing()">Watch Ads Now</button>
+        `;
+      } else {
+        homeCta.innerHTML = `
+          <button class="btn btn-light btn-lg me-2" onclick="showPage('login')">Log In</button>
+          <button class="btn btn-success btn-lg" onclick="showPage('register')">Register Now</button>
+        `;
+      }
+    }
+    
+    async function handleLogin(event) {
+      event.preventDefault();
+      
       const username = document.getElementById('login-username').value;
       const password = document.getElementById('login-password').value;
+      const alertEl = document.getElementById('login-alert');
       
-      // Simulate login (in a real app, this would call the API)
-      setTimeout(() => {
-        currentUser = {
-          id: 1,
-          username: username,
-          email: username + '@example.com'
-        };
+      try {
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ username, password })
+        });
         
-        updateUserInfo();
-        showPage('home-page');
-      }, 500);
+        if (response.ok) {
+          currentUser = await response.json();
+          alertEl.classList.remove('d-none', 'alert-danger');
+          alertEl.classList.add('alert-success');
+          alertEl.textContent = 'Login successful! Redirecting...';
+          
+          updateAuthUI(true);
+          
+          // Redirect after a short delay
+          setTimeout(() => {
+            showPage('profile');
+          }, 1000);
+        } else {
+          const error = await response.json();
+          alertEl.classList.remove('d-none', 'alert-success');
+          alertEl.classList.add('alert-danger');
+          alertEl.textContent = error.message || 'Invalid username or password';
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        alertEl.classList.remove('d-none', 'alert-success');
+        alertEl.classList.add('alert-danger');
+        alertEl.textContent = 'An error occurred. Please try again.';
+      }
     }
-
-    // Register function
-    function register(e) {
-      e.preventDefault();
+    
+    async function handleRegister(event) {
+      event.preventDefault();
+      
       const username = document.getElementById('register-username').value;
       const email = document.getElementById('register-email').value;
       const password = document.getElementById('register-password').value;
       const confirmPassword = document.getElementById('register-confirm-password').value;
+      const alertEl = document.getElementById('register-alert');
       
-      // Check if passwords match
+      // Validate passwords match
       if (password !== confirmPassword) {
-        alert("Passwords don't match");
+        alertEl.classList.remove('d-none', 'alert-success');
+        alertEl.classList.add('alert-danger');
+        alertEl.textContent = 'Passwords do not match';
         return;
       }
       
-      // Simulate registration (in a real app, this would call the API)
-      setTimeout(() => {
-        currentUser = {
-          id: 1,
-          username: username,
-          email: email
-        };
+      try {
+        const response = await fetch('/api/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ username, email, password })
+        });
         
-        updateUserInfo();
-        showPage('home-page');
-      }, 500);
-    }
-
-    // Logout function
-    function logout() {
-      currentUser = null;
-      adsWatched = 0;
-      updateUserInfo();
-      updateProgress();
-      showPage('auth-page');
-    }
-
-    // Update user info in header
-    function updateUserInfo() {
-      if (currentUser) {
-        document.getElementById('auth-buttons').classList.add('hidden');
-        document.getElementById('user-info').classList.remove('hidden');
-        document.getElementById('user-email').textContent = currentUser.email;
-        document.getElementById('claim-email').value = currentUser.email;
-      } else {
-        document.getElementById('auth-buttons').classList.remove('hidden');
-        document.getElementById('user-info').classList.add('hidden');
-      }
-    }
-
-    // Update progress tracker
-    function updateProgress() {
-      document.getElementById('ads-watched').textContent = adsWatched;
-      const percentage = Math.min((adsWatched / 5) * 100, 100);
-      document.getElementById('progress-bar').style.width = percentage + '%';
-      
-      // Check if user has watched enough ads
-      if (adsWatched >= 5 && currentUser) {
-        // Add to competition participants if not already added
-        const existingParticipant = participants.find(p => p.id === currentUser.id);
-        if (!existingParticipant) {
-          participants.push({
-            id: currentUser.id,
-            username: currentUser.username,
-            email: currentUser.email,
-            adsWatched: adsWatched,
-            lastActive: new Date()
-          });
-        } else {
-          existingParticipant.adsWatched = adsWatched;
-          existingParticipant.lastActive = new Date();
-        }
-        
-        // Sort participants by ads watched (descending)
-        participants.sort((a, b) => b.adsWatched - a.adsWatched);
-        
-        // Update leaderboard
-        updateLeaderboard();
-      }
-      
-      // Check if user qualifies for reward
-      if (adsWatched >= 5) {
-        document.getElementById('ad-viewer').classList.add('hidden');
-        document.getElementById('reward-claim').classList.remove('hidden');
-      } else {
-        document.getElementById('ad-viewer').classList.remove('hidden');
-        document.getElementById('reward-claim').classList.add('hidden');
-        document.getElementById('reward-success').classList.add('hidden');
-      }
-    }
-
-    // Play ad function
-    function playAd() {
-      if (adStatus !== 'ready' && adStatus !== 'completed') return;
-      
-      // Update ad states
-      adStatus = 'loading';
-      updateAdState();
-      
-      // Simulate ad loading
-      setTimeout(() => {
-        adStatus = 'playing';
-        updateAdState();
-        
-        // Reset progress
-        let progress = 0;
-        const progressBar = document.getElementById('ad-progress');
-        progressBar.style.width = '0%';
-        
-        // Simulate ad playback
-        const interval = setInterval(() => {
-          progress += 1;
-          progressBar.style.width = progress + '%';
+        if (response.ok) {
+          currentUser = await response.json();
+          alertEl.classList.remove('d-none', 'alert-danger');
+          alertEl.classList.add('alert-success');
+          alertEl.textContent = 'Registration successful! Redirecting...';
           
-          if (progress >= 100) {
-            clearInterval(interval);
-            adStatus = 'completed';
-            updateAdState();
+          updateAuthUI(true);
+          
+          // Redirect after a short delay
+          setTimeout(() => {
+            showPage('profile');
+          }, 1000);
+        } else {
+          const error = await response.json();
+          alertEl.classList.remove('d-none', 'alert-success');
+          alertEl.classList.add('alert-danger');
+          alertEl.textContent = error.message || 'Registration failed. Please try again.';
+        }
+      } catch (error) {
+        console.error('Registration error:', error);
+        alertEl.classList.remove('d-none', 'alert-success');
+        alertEl.classList.add('alert-danger');
+        alertEl.textContent = 'An error occurred. Please try again.';
+      }
+    }
+    
+    async function logout() {
+      try {
+        await fetch('/api/logout', { method: 'POST' });
+        currentUser = null;
+        updateAuthUI(false);
+        showPage('home');
+      } catch (error) {
+        console.error('Logout error:', error);
+      }
+    }
+    
+    // Ad viewing functions
+    function startAdViewing() {
+      if (!currentUser) {
+        showPage('login');
+        return;
+      }
+      
+      // Reset the ad modal state
+      document.getElementById('ad-loading').classList.remove('d-none');
+      document.getElementById('ad-playing').classList.add('d-none');
+      document.getElementById('ad-completed').classList.add('d-none');
+      document.getElementById('ad-completed-btn').disabled = true;
+      document.getElementById('ad-timer').textContent = '30';
+      document.getElementById('ad-progress').style.width = '0%';
+      
+      // Show the modal
+      adModal.show();
+      
+      // Simulate loading and then show the ad
+      setTimeout(() => {
+        document.getElementById('ad-loading').classList.add('d-none');
+        document.getElementById('ad-playing').classList.remove('d-none');
+        
+        // Start the ad timer
+        let secondsLeft = 30;
+        adTimer = secondsLeft;
+        
+        adInterval = setInterval(() => {
+          secondsLeft--;
+          document.getElementById('ad-timer').textContent = secondsLeft;
+          document.getElementById('ad-progress').style.width = ((30 - secondsLeft) / 30 * 100) + '%';
+          
+          if (secondsLeft <= 0) {
+            clearInterval(adInterval);
+            document.getElementById('ad-playing').classList.add('d-none');
+            document.getElementById('ad-completed').classList.remove('d-none');
+            document.getElementById('ad-completed-btn').disabled = false;
+          }
+        }, 1000);
+      }, 2000);
+    }
+    
+    async function completeAdView() {
+      if (!currentUser) return;
+      
+      try {
+        // Record the ad view
+        const response = await fetch('/api/ad-views', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ userId: currentUser.id })
+        });
+        
+        if (response.ok) {
+          // Close the modal
+          adModal.hide();
+          
+          // Clear any running intervals
+          clearInterval(adInterval);
+          
+          // Reload user profile
+          if (document.getElementById('profile-page').classList.contains('d-none')) {
+            showPage('profile');
+          } else {
+            loadUserProfile();
+          }
+          
+          // Reload leaderboards
+          loadTopLeaderboard();
+          loadFullLeaderboard();
+        } else {
+          console.error('Failed to record ad view');
+        }
+      } catch (error) {
+        console.error('Error recording ad view:', error);
+      }
+    }
+    
+    // Profile functions
+    async function loadUserProfile() {
+      if (!currentUser) return;
+      
+      try {
+        // Display user information
+        document.getElementById('profile-username').textContent = currentUser.username;
+        document.getElementById('profile-email').textContent = currentUser.email;
+        document.getElementById('profile-created').textContent = new Date(currentUser.created_at).toLocaleDateString();
+        
+        // Load user's ad views
+        const response = await fetch('/api/ad-views');
+        if (response.ok) {
+          const adViews = await response.json();
+          
+          // Update progress
+          const adViewCount = adViews.length;
+          document.getElementById('profile-ads-watched').textContent = adViewCount;
+          
+          // Update progress bar (max at 5 ads)
+          const progressPercent = Math.min(adViewCount, 5) / 5 * 100;
+          document.getElementById('profile-progress').style.width = progressPercent + '%';
+          
+          // Show qualification status
+          if (adViewCount >= 5) {
+            document.getElementById('profile-not-qualified').classList.add('d-none');
+            document.getElementById('profile-qualified').classList.remove('d-none');
             
-            // Record ad view
-            adsWatched++;
-            updateProgress();
-            
-            // Add user to qualified users if they watched 5 ads
-            if (adsWatched >= 5 && currentUser) {
-              if (!qualifiedUsers.some(user => user.id === currentUser.id)) {
-                qualifiedUsers.push({...currentUser});
-                updateQualifiedUsers();
+            // Get user's rank from leaderboard
+            const leaderboardResponse = await fetch('/api/leaderboard');
+            if (leaderboardResponse.ok) {
+              const leaderboard = await leaderboardResponse.json();
+              const userRank = leaderboard.findIndex(entry => entry.user_id === currentUser.id) + 1;
+              
+              if (userRank > 0) {
+                document.getElementById('profile-rank').textContent = '#' + userRank;
+              } else {
+                document.getElementById('profile-rank').textContent = 'not yet calculated';
               }
             }
-            
-            // Reset to ready state after a delay
-            setTimeout(() => {
-              adStatus = 'ready';
-              updateAdState();
-            }, 3000);
+          } else {
+            document.getElementById('profile-not-qualified').classList.remove('d-none');
+            document.getElementById('profile-qualified').classList.add('d-none');
           }
-        }, 100); // Simulate 10-second ad
-      }, 1500);
-    }
-
-    // Update ad state
-    function updateAdState() {
-      // Hide all states
-      document.getElementById('ad-ready').classList.add('hidden');
-      document.getElementById('ad-loading').classList.add('hidden');
-      document.getElementById('ad-playing').classList.add('hidden');
-      document.getElementById('ad-completed').classList.add('hidden');
-      
-      // Show current state
-      document.getElementById('ad-' + adStatus).classList.remove('hidden');
-      
-      // Update button text
-      const button = document.getElementById('ad-button');
-      if (adStatus === 'ready') {
-        button.textContent = 'Watch Ad';
-        button.disabled = false;
-      } else if (adStatus === 'loading') {
-        button.textContent = 'Loading...';
-        button.disabled = true;
-      } else if (adStatus === 'playing') {
-        button.textContent = 'Playing...';
-        button.disabled = true;
-      } else if (adStatus === 'completed') {
-        button.textContent = 'Ad Completed';
-        button.disabled = true;
-      }
-    }
-
-    // Claim reward
-    function claimReward(e) {
-      e.preventDefault();
-      const email = document.getElementById('claim-email').value;
-      const termsAgreed = document.getElementById('terms-agreed').checked;
-      
-      if (!termsAgreed) {
-        alert('You must agree to the terms and conditions');
-        return;
-      }
-      
-      // Simulate claiming reward
-      setTimeout(() => {
-        document.getElementById('reward-claim').classList.add('hidden');
-        document.getElementById('reward-success').classList.remove('hidden');
-        document.getElementById('reward-email').textContent = email;
-      }, 500);
-    }
-
-    // Go to admin page (leaderboard)
-    function goToAdmin() {
-      showPage('admin-page');
-      updateLeaderboard();
-      
-      // Update competition countdown
-      updateCompetitionCountdown();
-    }
-    
-    // Format date for leaderboard
-    function formatDate(date) {
-      const now = new Date();
-      const diff = now - date; // difference in milliseconds
-      
-      if (diff < 60000) { // less than a minute
-        return 'Just now';
-      } else if (diff < 3600000) { // less than an hour
-        const minutes = Math.floor(diff / 60000);
-        return minutes + (minutes === 1 ? ' minute ago' : ' minutes ago');
-      } else if (diff < 86400000) { // less than a day
-        const hours = Math.floor(diff / 3600000);
-        return hours + (hours === 1 ? ' hour ago' : ' hours ago');
-      } else {
-        const days = Math.floor(diff / 86400000);
-        return days + (days === 1 ? ' day ago' : ' days ago');
-      }
-    }
-    
-    // Update competition countdown
-    function updateCompetitionCountdown() {
-      const now = new Date();
-      const diff = competitionEndDate - now;
-      
-      if (diff <= 0) {
-        document.getElementById('competition-countdown').textContent = 'Competition ended';
-        document.getElementById('admin-competition-countdown').textContent = 'Competition ended';
-        document.getElementById('competition-end-time').textContent = 'Competition ended';
-        return;
-      }
-      
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      
-      const countdownText = `${days}d ${hours}h ${minutes}m`;
-      
-      document.getElementById('competition-countdown').textContent = countdownText;
-      document.getElementById('admin-competition-countdown').textContent = countdownText;
-      document.getElementById('competition-end-time').textContent = countdownText;
-    }
-    
-    // Update leaderboard
-    function updateLeaderboard() {
-      // Sort participants by ads watched (descending)
-      participants.sort((a, b) => b.adsWatched - a.adsWatched);
-      
-      // Update total participants count
-      document.getElementById('total-users').textContent = participants.length;
-      
-      if (participants.length === 0) {
-        document.getElementById('no-users').classList.remove('hidden');
-        document.getElementById('leaderboard').classList.add('hidden');
-        return;
-      }
-      
-      document.getElementById('no-users').classList.add('hidden');
-      document.getElementById('leaderboard').classList.remove('hidden');
-      
-      // Update top 3 winners
-      if (participants.length > 0) {
-        document.getElementById('first-place-name').textContent = participants[0].username;
-        document.getElementById('first-place-ads').textContent = participants[0].adsWatched;
-      }
-      
-      if (participants.length > 1) {
-        document.getElementById('second-place-name').textContent = participants[1].username;
-        document.getElementById('second-place-ads').textContent = participants[1].adsWatched;
-      }
-      
-      if (participants.length > 2) {
-        document.getElementById('third-place-name').textContent = participants[2].username;
-        document.getElementById('third-place-ads').textContent = participants[2].adsWatched;
-      }
-      
-      // Clear existing rows
-      const tbody = document.getElementById('leaderboard-tbody');
-      tbody.innerHTML = '';
-      
-      // Add participant rows (top 100 only)
-      const topParticipants = participants.slice(0, 100);
-      topParticipants.forEach((participant, index) => {
-        const row = document.createElement('tr');
-        row.className = 'leaderboard-item';
-        
-        const rankCell = document.createElement('td');
-        rankCell.className = 'px-6 py-4 whitespace-nowrap text-sm font-medium';
-        
-        // Special styling for top 3
-        if (index === 0) {
-          rankCell.innerHTML = `<span class="trophy-gold">1 🏆</span>`;
-        } else if (index === 1) {
-          rankCell.innerHTML = `<span class="trophy-silver">2 🥈</span>`;
-        } else if (index === 2) {
-          rankCell.innerHTML = `<span class="trophy-bronze">3 🥉</span>`;
-        } else {
-          rankCell.textContent = index + 1;
         }
-        
-        const usernameCell = document.createElement('td');
-        usernameCell.className = 'px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900';
-        usernameCell.textContent = participant.username;
-        
-        const adsWatchedCell = document.createElement('td');
-        adsWatchedCell.className = 'px-6 py-4 whitespace-nowrap text-sm text-gray-700';
-        adsWatchedCell.textContent = participant.adsWatched;
-        
-        const lastActiveCell = document.createElement('td');
-        lastActiveCell.className = 'px-6 py-4 whitespace-nowrap text-sm text-gray-500';
-        lastActiveCell.textContent = formatDate(participant.lastActive);
-        
-        row.appendChild(rankCell);
-        row.appendChild(usernameCell);
-        row.appendChild(adsWatchedCell);
-        row.appendChild(lastActiveCell);
-        
-        tbody.appendChild(row);
-      });
-    }
-    
-    // Export leaderboard as CSV
-    function exportLeaderboardCSV() {
-      if (participants.length === 0) return;
-      
-      // Create CSV content
-      const headers = ['Rank', 'Username', 'Ads Watched', 'Last Active'];
-      const csvRows = [
-        headers.join(','),
-        ...participants.map((participant, index) => [
-          index + 1,
-          participant.username,
-          participant.adsWatched,
-          participant.lastActive.toISOString()
-        ].join(','))
-      ];
-      
-      const csvContent = 'data:text/csv;charset=utf-8,' + csvRows.join('\n');
-      const encodedUri = encodeURI(csvContent);
-      
-      // Create download link
-      const link = document.createElement('a');
-      link.setAttribute('href', encodedUri);
-      link.setAttribute('download', 'ad_watching_leaderboard.csv');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-    // Update qualified users table
-    function updateQualifiedUsers() {
-      document.getElementById('total-users').textContent = qualifiedUsers.length;
-      
-      if (qualifiedUsers.length === 0) {
-        document.getElementById('no-users').classList.remove('hidden');
-        document.getElementById('users-table').classList.add('hidden');
-        document.getElementById('export-button').disabled = true;
-        return;
+      } catch (error) {
+        console.error('Error loading profile:', error);
       }
-      
-      document.getElementById('no-users').classList.add('hidden');
-      document.getElementById('users-table').classList.remove('hidden');
-      document.getElementById('export-button').disabled = false;
-      
-      // Clear existing rows
-      const tbody = document.getElementById('users-tbody');
-      tbody.innerHTML = '';
-      
-      // Add user rows
-      qualifiedUsers.forEach(user => {
-        const row = document.createElement('tr');
-        
-        const idCell = document.createElement('td');
-        idCell.className = 'px-6 py-4 whitespace-nowrap text-sm text-gray-500';
-        idCell.textContent = user.id;
-        
-        const usernameCell = document.createElement('td');
-        usernameCell.className = 'px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900';
-        usernameCell.textContent = user.username;
-        
-        const emailCell = document.createElement('td');
-        emailCell.className = 'px-6 py-4 whitespace-nowrap text-sm text-gray-500';
-        emailCell.textContent = user.email;
-        
-        row.appendChild(idCell);
-        row.appendChild(usernameCell);
-        row.appendChild(emailCell);
-        
-        tbody.appendChild(row);
-      });
     }
-
-    // Export users as CSV
-    function exportUsersCSV() {
-      if (qualifiedUsers.length === 0) return;
-      
-      // Create CSV content
-      const headers = ['ID', 'Username', 'Email'];
-      const csvRows = [
-        headers.join(','),
-        ...qualifiedUsers.map(user => [
-          user.id,
-          user.username,
-          user.email
-        ].join(','))
-      ];
-      
-      const csvContent = 'data:text/csv;charset=utf-8,' + csvRows.join('\n');
-      const encodedUri = encodeURI(csvContent);
-      
-      // Create download link
-      const link = document.createElement('a');
-      link.setAttribute('href', encodedUri);
-      link.setAttribute('download', 'qualified_users.csv');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-    // Initialize the app
-    document.addEventListener('DOMContentLoaded', () => {
-      // Start with auth page
-      showPage('auth-page');
-      showLoginForm();
-      
-      // Initialize competition countdown
-      updateCompetitionCountdown();
-      
-      // Update countdown every minute
-      setInterval(updateCompetitionCountdown, 60000);
-      
-      // Add some sample participants for demo purposes
-      addSampleParticipants();
-    });
     
-    // Add sample participants for demo
-    function addSampleParticipants() {
-      // Only add sample data if no participants exist yet
-      if (participants.length > 0) return;
+    // Leaderboard functions
+    async function loadTopLeaderboard() {
+      try {
+        const response = await fetch('/api/leaderboard?limit=5');
+        if (response.ok) {
+          const leaderboard = await response.json();
+          const leaderboardBody = document.getElementById('home-leaderboard').querySelector('tbody');
+          
+          leaderboardBody.innerHTML = '';
+          
+          if (leaderboard.length === 0) {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td colspan="3" class="text-center">No qualified participants yet.</td>
+            `;
+            leaderboardBody.appendChild(row);
+          } else {
+            leaderboard.forEach((entry, index) => {
+              const row = document.createElement('tr');
+              let rankClass = '';
+              
+              if (index === 0) rankClass = 'top-1';
+              else if (index === 1) rankClass = 'top-2';
+              else if (index === 2) rankClass = 'top-3';
+              
+              row.innerHTML = `
+                <td class="rank ${rankClass}">#${index + 1}</td>
+                <td>${entry.username}</td>
+                <td>${entry.ads_watched}</td>
+              `;
+              
+              // Highlight current user
+              if (currentUser && entry.user_id === currentUser.id) {
+                row.classList.add('user-highlight');
+              }
+              
+              leaderboardBody.appendChild(row);
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error loading top leaderboard:', error);
+      }
+    }
+    
+    async function loadFullLeaderboard() {
+      try {
+        const response = await fetch('/api/leaderboard');
+        if (response.ok) {
+          const leaderboard = await response.json();
+          const leaderboardBody = document.getElementById('full-leaderboard').querySelector('tbody');
+          
+          leaderboardBody.innerHTML = '';
+          
+          if (leaderboard.length === 0) {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td colspan="4" class="text-center">No qualified participants yet.</td>
+            `;
+            leaderboardBody.appendChild(row);
+          } else {
+            leaderboard.forEach((entry, index) => {
+              const row = document.createElement('tr');
+              let rankClass = '';
+              
+              if (index === 0) rankClass = 'top-1';
+              else if (index === 1) rankClass = 'top-2';
+              else if (index === 2) rankClass = 'top-3';
+              
+              const lastActive = new Date(entry.last_active).toLocaleString();
+              
+              row.innerHTML = `
+                <td class="rank ${rankClass}">#${index + 1}</td>
+                <td>${entry.username}</td>
+                <td>${entry.ads_watched}</td>
+                <td>${lastActive}</td>
+              `;
+              
+              // Highlight current user
+              if (currentUser && entry.user_id === currentUser.id) {
+                row.classList.add('user-highlight');
+              }
+              
+              leaderboardBody.appendChild(row);
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error loading full leaderboard:', error);
+      }
+    }
+    
+    // Competition functions
+    async function loadCompetitionData() {
+      try {
+        const response = await fetch('/api/competition');
+        if (response.ok) {
+          const competition = await response.json();
+          
+          if (competition) {
+            competitionEndDate = new Date(competition.end_date);
+            updateCountdown();
+            
+            // Start countdown timer
+            if (countdownInterval) {
+              clearInterval(countdownInterval);
+            }
+            
+            countdownInterval = setInterval(updateCountdown, 1000);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading competition data:', error);
+      }
+    }
+    
+    function updateCountdown() {
+      if (!competitionEndDate) return;
       
-      const sampleParticipants = [
-        { id: 101, username: "AdWatcherPro", email: "example1@example.com", adsWatched: 48, lastActive: new Date(Date.now() - 2 * 60 * 60 * 1000) },
-        { id: 102, username: "VideoViewer", email: "example2@example.com", adsWatched: 43, lastActive: new Date(Date.now() - 5 * 60 * 60 * 1000) },
-        { id: 103, username: "AdEnthusiast", email: "example3@example.com", adsWatched: 39, lastActive: new Date(Date.now() - 8 * 60 * 60 * 1000) },
-        { id: 104, username: "CommercialFan", email: "example4@example.com", adsWatched: 35, lastActive: new Date(Date.now() - 12 * 60 * 60 * 1000) },
-        { id: 105, username: "AdRewarder", email: "example5@example.com", adsWatched: 28, lastActive: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) },
-        { id: 106, username: "ViewMaster", email: "example6@example.com", adsWatched: 25, lastActive: new Date(Date.now() - 1.5 * 24 * 60 * 60 * 1000) },
-        { id: 107, username: "AdWatcher875", email: "example7@example.com", adsWatched: 21, lastActive: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) },
-        { id: 108, username: "StreamViewer", email: "example8@example.com", adsWatched: 18, lastActive: new Date(Date.now() - 2.5 * 24 * 60 * 60 * 1000) },
-        { id: 109, username: "AdCollector", email: "example9@example.com", adsWatched: 15, lastActive: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000) },
-        { id: 110, username: "CommercialHunter", email: "example10@example.com", adsWatched: 12, lastActive: new Date(Date.now() - 3.5 * 24 * 60 * 60 * 1000) },
-      ];
+      const now = new Date();
+      const distance = competitionEndDate - now;
       
-      // Add sample participants to the array
-      participants.push(...sampleParticipants);
+      // Calculate time
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      
+      // Update countdown on homepage
+      document.getElementById('days').textContent = days;
+      document.getElementById('hours').textContent = hours;
+      document.getElementById('minutes').textContent = minutes;
+      document.getElementById('seconds').textContent = seconds;
+      
+      // Update countdown on leaderboard page
+      document.getElementById('leaderboard-days').textContent = days;
+      document.getElementById('leaderboard-hours').textContent = hours;
+      document.getElementById('leaderboard-minutes').textContent = minutes;
+      document.getElementById('leaderboard-seconds').textContent = seconds;
+      
+      // If the countdown is finished, reload competition data (to get the new one)
+      if (distance < 0) {
+        clearInterval(countdownInterval);
+        loadCompetitionData();
+      }
     }
   </script>
 </body>

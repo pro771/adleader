@@ -1,6 +1,104 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import pkg from 'pg';
+const { Pool } = pkg;
+
+// Initialize database tables
+async function initDatabase() {
+  const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+  });
+
+  try {
+    // Create users table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(100) UNIQUE NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Create ad_views table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS ad_views (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id),
+        viewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    
+    // Create competitions table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS competitions (
+        id SERIAL PRIMARY KEY,
+        start_date TIMESTAMP NOT NULL,
+        end_date TIMESTAMP NOT NULL,
+        is_active BOOLEAN DEFAULT TRUE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    
+    // Create competition_participants table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS competition_participants (
+        id SERIAL PRIMARY KEY,
+        competition_id INTEGER REFERENCES competitions(id),
+        user_id INTEGER REFERENCES users(id),
+        ads_watched INTEGER DEFAULT 0,
+        last_active TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(competition_id, user_id)
+      )
+    `);
+    
+    log('Database initialized successfully');
+    
+    // Create current week's competition if it doesn't exist
+    const now = new Date();
+    const endOfWeek = new Date();
+    endOfWeek.setDate(now.getDate() + (7 - now.getDay())); // Next Sunday
+    endOfWeek.setHours(23, 59, 59, 999);
+    
+    const startOfWeek = new Date(endOfWeek);
+    startOfWeek.setDate(endOfWeek.getDate() - 7); // Previous Sunday
+    startOfWeek.setHours(0, 0, 0, 0);
+    
+    // Check if we have an active competition
+    const competitionCheck = await pool.query(`
+      SELECT * FROM competitions 
+      WHERE is_active = TRUE AND end_date > $1
+      LIMIT 1
+    `, [now]);
+    
+    if (competitionCheck.rows.length === 0) {
+      // Create a new competition
+      await pool.query(`
+        INSERT INTO competitions (start_date, end_date)
+        VALUES ($1, $2)
+      `, [startOfWeek, endOfWeek]);
+      
+      log('New weekly competition created');
+    }
+    
+    return true;
+  } catch (error) {
+    console.error('Error initializing database:', error);
+    return false;
+  } finally {
+    // Close the pool
+    await pool.end();
+  }
+}
+
+// Initialize the database before starting the server
+initDatabase().catch(err => {
+  console.error('Database initialization failed:', err);
+});
 
 const app = express();
 app.use(express.json());
