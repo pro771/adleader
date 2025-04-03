@@ -1,7 +1,8 @@
-# Dependency directories
+# Node.js dependencies
 node_modules/
-.pnp/
-.pnp.js
+npm-debug.log
+yarn-debug.log
+yarn-error.log
 
 # Environment variables
 .env
@@ -10,6 +11,11 @@ node_modules/
 .env.test.local
 .env.production.local
 
+# Build directories
+build/
+dist/
+out/
+
 # Logs
 logs
 *.log
@@ -17,46 +23,24 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Distribution / build outputs
-dist/
-build/
-out/
-.next/
-
-# Cache and bundler directories
-.cache/
-.parcel-cache/
-.npm/
-.eslintcache
-.stylelintcache
-
-# IDE specific files
+# IDE and editor directories
 .idea/
 .vscode/
 *.swp
 *.swo
+
+# OS files
 .DS_Store
-*.sublime-project
-*.sublime-workspace
+Thumbs.db
+
+# Temp files
+*.tmp
+*.temp
+
+# Drizzle
+.drizzle/
 
 # Replit specific
 .replit
-.config/
-.breakpoints
 replit.nix
-.upm/
-
-# Database files
-*.db
-*.sqlite
-*.sqlite3
-
-# Temporary files
-tmp/
-temp/
+.config/

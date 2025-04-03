@@ -27,9 +27,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // AdQuake config route
   app.get('/api/adquake-config', (req, res) => {
-    // This will be stored in environment variables in production
+    // Get publisher ID from environment variables
+    if (!process.env.ADQUAKE_PUBLISHER_ID) {
+      console.warn('ADQUAKE_PUBLISHER_ID environment variable not set');
+    }
     res.json({
-      publisherId: process.env.ADQUAKE_PUBLISHER_ID || 'YOUR_PUBLISHER_ID'
+      publisherId: process.env.ADQUAKE_PUBLISHER_ID || '',
+      dnsVerification: 'GBhpqMNiyk+YNh3KiUjavQ=='
     });
   });
   

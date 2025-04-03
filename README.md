@@ -1,49 +1,47 @@
-# Ad Watching Competition Platform
+# AdLeader - Weekly Ad Watching Competition Platform
 
-A web-based competition platform where users can watch ads to earn placement on a leaderboard. After watching 5 ads, users are eligible to appear on the top 100 leaderboard. The user who watched the most ads is announced as the winner at the end of each week.
+A competition-based website where users watch ads to earn placement on a leaderboard. After watching 5 ads, users are eligible to appear on a top 100 leaderboard. The user who watched the most ads is announced as the winner at the end of each week.
 
 ## Features
 
 - User authentication system with registration and login
-- Weekly competition format with real-time countdown timer
-- Ad viewing system with 30-second timer
-- Top 100 leaderboard tracking user participation
-- Responsive design for desktop and mobile devices
+- Ad watching functionality with 30-second timer
+- Weekly competition format with automatic resets
+- Leaderboard displaying top 100 users
+- Real-time countdown timer showing competition end time
 - PostgreSQL database for data persistence
-- AdQuake integration for ad monetization
 
-## Tech Stack
+## Technology Stack
 
-- Frontend: HTML, CSS, JavaScript, Bootstrap
-- Backend: Node.js, Express
+- Frontend: HTML, CSS, JavaScript
+- Backend: Node.js with Express
 - Database: PostgreSQL
 - ORM: Drizzle
-- Authentication: Passport.js with session-based auth
+- Authentication: Passport.js
+- Styling: Bootstrap 5 + custom CSS
 
-## Setup
+## Setup Instructions
 
 1. Clone the repository
-2. Install dependencies with `npm install`
-3. Set up PostgreSQL database and update connection string in environment variables
-4. Run database migrations with `npm run db:push`
-5. Start the server with `npm run dev`
+2. Install dependencies: `npm install`
+3. Create a PostgreSQL database and set up environment variables:
+   - Copy `.env.example` to `.env` and update variables
+4. Initialize the database: `node scripts/init-db.js`
+5. Start the application: `npm run dev`
 
 ## Environment Variables
 
-The following environment variables are required:
+Create a `.env` file with the following variables:
 
-- `DATABASE_URL`: PostgreSQL connection string
-- `SESSION_SECRET`: Secret for session encryption
-- `ADQUAKE_PUBLISHER_ID`: Your AdQuake Publisher ID (for ad monetization)
-
-## Domain Verification
-
-For AdQuake integration, add the following meta tag to your website:
-
-```html
-<meta name="_adquake_domain_verification" content="YOUR_VERIFICATION_CODE">
 ```
+DATABASE_URL=postgresql://username:password@localhost:5432/adleader
+SESSION_SECRET=your_session_secret
+```
+
+## Screenshots
+
+[Screenshots to be added here]
 
 ## License
 
-[MIT](LICENSE)
+[MIT License](LICENSE)
