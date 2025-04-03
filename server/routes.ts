@@ -25,6 +25,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile('index.html', { root: process.cwd() });
   });
   
+  // AdQuake config route
+  app.get('/api/adquake-config', (req, res) => {
+    // This will be stored in environment variables in production
+    res.json({
+      publisherId: process.env.ADQUAKE_PUBLISHER_ID || 'YOUR_PUBLISHER_ID'
+    });
+  });
+  
   // Setup authentication routes
   setupAuth(app);
 
