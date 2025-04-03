@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ad Rewards - Watch Ads, Earn $10</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9fafb;
+    }
+    .ad-container {
+      aspect-ratio: 16/9;
+      position: relative;
+      overflow: hidden;
+    }
+    .progress-bar {
+      transition: width 0.1s;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-white shadow">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+        <div class="flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <h1 class="ml-2 text-2xl font-bold text-gray-900">AdRewards</h1>
+        </div>
+        
+        <div id="auth-buttons">
+          <button onclick="showLoginForm()" class="text-indigo-600 hover:text-indigo-800 transition-colors font-medium">
+            Login
+          </button>
+          <button onclick="showRegisterForm()" class="ml-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors inline-block">
+            Register
+          </button>
+        </div>
+        
+        <div id="user-info" class="hidden flex items-center space-x-4">
+          <span id="user-email" class="text-gray-700 hidden md:inline-block">user@example.com</span>
+          <button onclick="goToAdmin()" class="text-indigo-600 hover:text-indigo-800 transition-colors font-medium">
+            Admin
+          </button>
+          <button onclick="logout()" class="text-gray-600 hover:text-gray-800">
+            Logout
+          </button>
+        </div>
+      </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="flex-grow">
+      <!-- Auth Page -->
+      <div id="auth-page" class="max-w-6xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-2 gap-8 items-center">
+          <!-- Auth Form -->
+          <div class="bg-white p-6 rounded-lg shadow-md w-full">
+            <div class="text-center mb-8">
+              <h2 class="text-2xl font-bold text-gray-900 mb-2">Welcome to AdRewards</h2>
+              <p class="text-gray-600">Watch ads. Earn rewards. It's that simple.</p>
+            </div>
+            
+            <div class="tabs">
+              <div class="grid grid-cols-2 gap-2 mb-6">
+                <button onclick="showLoginForm()" id="login-tab" class="py-2 font-medium rounded text-center bg-indigo-600 text-white">Login</button>
+                <button onclick="showRegisterForm()" id="register-tab" class="py-2 font-medium rounded text-center bg-gray-200 text-gray-700">Register</button>
+              </div>
+              
+              <!-- Login Form -->
+              <form id="login-form" onsubmit="login(event)" class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                  <input type="text" id="login-username" placeholder="Enter your username" required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                  <input type="password" id="login-password" placeholder="Enter your password" required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors">
+                  Log In
+                </button>
+                
+                <div class="text-center text-sm text-gray-600 mt-4">
+                  Don't have an account?
+                  <button type="button" onclick="showRegisterForm()" class="text-indigo-600 hover:text-indigo-800">
+                    Register here
+                  </button>
+                </div>
+              </form>
+              
+              <!-- Register Form -->
+              <form id="register-form" onsubmit="register(event)" class="space-y-4 hidden">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                  <input type="text" id="register-username" placeholder="Choose a username" required minlength="3"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <input type="email" id="register-email" placeholder="Enter your email" required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                  <input type="password" id="register-password" placeholder="Create a password" required minlength="6"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                  <input type="password" id="register-confirm-password" placeholder="Confirm your password" required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors">
+                  Register
+                </button>
+                
+                <div class="text-center text-sm text-gray-600 mt-4">
+                  Already have an account?
+                  <button type="button" onclick="showLoginForm()" class="text-indigo-600 hover:text-indigo-800">
+                    Login here
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          
+          <!-- Hero Section -->
+          <div class="flex flex-col space-y-6">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900">
+              Watch Ads, Get <span class="text-indigo-600">$10 Reward</span>
+            </h1>
+            
+            <p class="text-gray-600">
+              Join thousands of users already earning rewards by simply watching a few ads. It's the easiest way to earn extra cash online.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div class="flex items-start space-x-3">
+                <div class="bg-indigo-100 p-2 rounded-full">
+                  <svg class="h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-medium text-gray-900">Simple Process</h3>
+                  <p class="text-sm text-gray-600">Watch 4 ads. Get $10. No tricks.</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start space-x-3">
+                <div class="bg-indigo-100 p-2 rounded-full">
+                  <svg class="h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-medium text-gray-900">Secure Rewards</h3>
+                  <p class="text-sm text-gray-600">Your data and rewards are safe with us.</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start space-x-3">
+                <div class="bg-indigo-100 p-2 rounded-full">
+                  <svg class="h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-medium text-gray-900">Instant Payout</h3>
+                  <p class="text-sm text-gray-600">Get your reward sent directly to your email.</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start space-x-3">
+                <div class="bg-indigo-100 p-2 rounded-full">
+                  <svg class="h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-medium text-gray-900">Quick & Easy</h3>
+                  <p class="text-sm text-gray-600">Complete all 4 ads in under 10 minutes.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Home Page -->
+      <div id="home-page" class="hidden max-w-4xl mx-auto my-8 px-4">
+        <!-- Progress Tracker -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold text-gray-900">Your Progress</h2>
+            <div class="flex items-center">
+              <span class="text-sm font-medium text-gray-700 mr-2">Ads Watched:</span>
+              <span id="ads-watched" class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-indigo-100 text-indigo-600 font-medium">
+                0
+              </span>
+              <span class="text-sm font-medium text-gray-700 mx-2">/</span>
+              <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-gray-100 text-gray-800 font-medium">
+                4
+              </span>
+            </div>
+          </div>
+          
+          <div class="w-full bg-gray-200 h-2 rounded-full mb-4">
+            <div id="progress-bar" class="progress-bar bg-indigo-600 h-2 rounded-full" style="width: 0%"></div>
+          </div>
+          
+          <p class="text-sm text-gray-600">
+            Watch 4 ads to qualify for the $10 reward. Your progress is automatically saved.
+          </p>
+        </div>
+        
+        <!-- Ad Viewer -->
+        <div id="ad-viewer" class="bg-white rounded-lg shadow-md p-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Watch Ad to Earn Rewards</h2>
+          <p class="text-gray-600 mb-6">
+            Click the button below to watch an ad. Each completed ad brings you closer to claiming your reward.
+          </p>
+          
+          <!-- Ad Container -->
+          <div class="ad-container bg-gray-100 rounded-lg mb-6 overflow-hidden">
+            <!-- Ready State -->
+            <div id="ad-ready" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <p class="text-gray-500">Your ad is ready to play. Click the button below to start.</p>
+            </div>
+            
+            <!-- Loading State -->
+            <div id="ad-loading" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center hidden">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 mb-4 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              <p class="text-gray-500">Loading your ad...</p>
+            </div>
+            
+            <!-- Playing State -->
+            <div id="ad-playing" class="absolute inset-0 hidden">
+              <div class="w-full h-full bg-gray-800 flex items-center justify-center">
+                <div class="text-white text-center p-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <p class="text-xl mb-2">Ad is playing...</p>
+                  <p class="text-sm text-gray-300 mb-4">Please wait while the ad completes</p>
+                  <div class="w-full bg-gray-600 h-2 rounded-full overflow-hidden">
+                    <div id="ad-progress" class="bg-indigo-500 h-full transition-all" style="width: 0%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Completed State -->
+            <div id="ad-completed" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-green-500 bg-opacity-10 hidden">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-green-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <p class="text-green-500 font-medium text-lg">Ad completed successfully!</p>
+              <p class="text-gray-500 mt-2">Your progress has been updated.</p>
+            </div>
+          </div>
+          
+          <div class="flex justify-center">
+            <button id="ad-button" onclick="playAd()" class="flex items-center bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+              </svg>
+              Watch Ad
+            </button>
+          </div>
+        </div>
+        
+        <!-- Reward Claim -->
+        <div id="reward-claim" class="hidden bg-white mt-8 rounded-lg shadow-md p-6 border-2 border-green-500">
+          <div class="text-center">
+            <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-green-100 text-green-500 mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Congratulations!</h2>
+            <p class="text-gray-600 mb-6">You've watched all 4 ads and qualified for the reward!</p>
+            
+            <form id="claim-form" onsubmit="claimReward(event)" class="max-w-md mx-auto space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Your Email</label>
+                <input type="email" id="claim-email" required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                <p class="text-xs text-gray-500 mt-1">We'll send your reward to this email address.</p>
+              </div>
+              
+              <div class="flex items-start space-x-3">
+                <input type="checkbox" id="terms-agreed" required
+                  class="mt-1 h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
+                <label for="terms-agreed" class="text-sm text-gray-700">
+                  I agree to the terms and conditions
+                </label>
+              </div>
+              
+              <button type="submit" class="w-full mt-4 bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md transition-colors">
+                Claim Your Reward
+              </button>
+            </form>
+          </div>
+        </div>
+        
+        <!-- Success Message -->
+        <div id="reward-success" class="hidden bg-white mt-8 rounded-lg shadow-md p-6 border-2 border-green-500 text-center">
+          <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-green-100 text-green-500 mb-4">
+            <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900 mb-2">Reward Successfully Claimed!</h2>
+          <p class="text-gray-600 mb-2">Your $10 reward has been processed.</p>
+          <p class="text-gray-600">We've sent the details to: <strong id="reward-email">user@example.com</strong></p>
+        </div>
+      </div>
+      
+      <!-- Admin Page -->
+      <div id="admin-page" class="hidden max-w-6xl mx-auto my-8 px-4">
+        <div class="bg-white rounded-lg shadow-md">
+          <div class="p-6 flex flex-row items-center justify-between border-b">
+            <h2 class="text-2xl font-bold text-gray-900">Qualified Users</h2>
+            <button onclick="exportUsersCSV()" id="export-button" class="flex items-center bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              Export to CSV
+            </button>
+          </div>
+          
+          <div class="p-6">
+            <div id="no-users" class="flex flex-col items-center justify-center py-10 text-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+              <h3 class="text-xl font-medium text-gray-700 mb-2">No Qualified Users Yet</h3>
+              <p class="text-gray-500 max-w-md">
+                When users watch 4 ads and qualify for rewards, they will appear here.
+              </p>
+            </div>
+            
+            <div id="users-table" class="hidden overflow-x-auto">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                  </tr>
+                </thead>
+                <tbody id="users-tbody" class="bg-white divide-y divide-gray-200">
+                  <!-- User rows will go here -->
+                </tbody>
+              </table>
+            </div>
+            
+            <div class="mt-6 text-center text-sm text-gray-500">
+              <p>Total qualified users: <span id="total-users">0</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-300 py-8 mt-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div>
+            <h3 class="text-lg font-semibold mb-4 flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              AdRewards
+            </h3>
+            <p class="text-gray-400 text-sm">Watch ads. Earn rewards. It's that simple.</p>
+          </div>
+          
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+            <ul class="space-y-2 text-sm">
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                  How It Works
+                </a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                  Rewards
+                </a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                  FAQ
+                </a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                  Contact Us
+                </a>
+              </li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Legal</h3>
+            <ul class="space-y-2 text-sm">
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                  Terms of Service
+                </a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                  Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                  Cookie Policy
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-400">
+          <p>&copy; 2025 AdRewards. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Store the user data
+    let currentUser = null;
+    let adsWatched = 0;
+    let adStatus = 'ready';
+    let qualifiedUsers = [];
+
+    // Page navigation
+    function showPage(pageId) {
+      // Hide all pages
+      document.querySelectorAll('#auth-page, #home-page, #admin-page').forEach(page => {
+        page.classList.add('hidden');
+      });
+      
+      // Show the requested page
+      document.getElementById(pageId).classList.remove('hidden');
+    }
+
+    // Show login form
+    function showLoginForm() {
+      document.getElementById('login-form').classList.remove('hidden');
+      document.getElementById('register-form').classList.add('hidden');
+      document.getElementById('login-tab').classList.add('bg-indigo-600', 'text-white');
+      document.getElementById('login-tab').classList.remove('bg-gray-200', 'text-gray-700');
+      document.getElementById('register-tab').classList.add('bg-gray-200', 'text-gray-700');
+      document.getElementById('register-tab').classList.remove('bg-indigo-600', 'text-white');
+    }
+
+    // Show register form
+    function showRegisterForm() {
+      document.getElementById('login-form').classList.add('hidden');
+      document.getElementById('register-form').classList.remove('hidden');
+      document.getElementById('login-tab').classList.add('bg-gray-200', 'text-gray-700');
+      document.getElementById('login-tab').classList.remove('bg-indigo-600', 'text-white');
+      document.getElementById('register-tab').classList.add('bg-indigo-600', 'text-white');
+      document.getElementById('register-tab').classList.remove('bg-gray-200', 'text-gray-700');
+    }
+
+    // Login function
+    function login(e) {
+      e.preventDefault();
+      const username = document.getElementById('login-username').value;
+      const password = document.getElementById('login-password').value;
+      
+      // Simulate login (in a real app, this would call the API)
+      setTimeout(() => {
+        currentUser = {
+          id: 1,
+          username: username,
+          email: username + '@example.com'
+        };
+        
+        updateUserInfo();
+        showPage('home-page');
+      }, 500);
+    }
+
+    // Register function
+    function register(e) {
+      e.preventDefault();
+      const username = document.getElementById('register-username').value;
+      const email = document.getElementById('register-email').value;
+      const password = document.getElementById('register-password').value;
+      const confirmPassword = document.getElementById('register-confirm-password').value;
+      
+      // Check if passwords match
+      if (password !== confirmPassword) {
+        alert("Passwords don't match");
+        return;
+      }
+      
+      // Simulate registration (in a real app, this would call the API)
+      setTimeout(() => {
+        currentUser = {
+          id: 1,
+          username: username,
+          email: email
+        };
+        
+        updateUserInfo();
+        showPage('home-page');
+      }, 500);
+    }
+
+    // Logout function
+    function logout() {
+      currentUser = null;
+      adsWatched = 0;
+      updateUserInfo();
+      updateProgress();
+      showPage('auth-page');
+    }
+
+    // Update user info in header
+    function updateUserInfo() {
+      if (currentUser) {
+        document.getElementById('auth-buttons').classList.add('hidden');
+        document.getElementById('user-info').classList.remove('hidden');
+        document.getElementById('user-email').textContent = currentUser.email;
+        document.getElementById('claim-email').value = currentUser.email;
+      } else {
+        document.getElementById('auth-buttons').classList.remove('hidden');
+        document.getElementById('user-info').classList.add('hidden');
+      }
+    }
+
+    // Update progress tracker
+    function updateProgress() {
+      document.getElementById('ads-watched').textContent = adsWatched;
+      const percentage = Math.min((adsWatched / 4) * 100, 100);
+      document.getElementById('progress-bar').style.width = percentage + '%';
+      
+      // Check if user qualifies for reward
+      if (adsWatched >= 4) {
+        document.getElementById('ad-viewer').classList.add('hidden');
+        document.getElementById('reward-claim').classList.remove('hidden');
+      } else {
+        document.getElementById('ad-viewer').classList.remove('hidden');
+        document.getElementById('reward-claim').classList.add('hidden');
+        document.getElementById('reward-success').classList.add('hidden');
+      }
+    }
+
+    // Play ad function
+    function playAd() {
+      if (adStatus !== 'ready' && adStatus !== 'completed') return;
+      
+      // Update ad states
+      adStatus = 'loading';
+      updateAdState();
+      
+      // Simulate ad loading
+      setTimeout(() => {
+        adStatus = 'playing';
+        updateAdState();
+        
+        // Reset progress
+        let progress = 0;
+        const progressBar = document.getElementById('ad-progress');
+        progressBar.style.width = '0%';
+        
+        // Simulate ad playback
+        const interval = setInterval(() => {
+          progress += 1;
+          progressBar.style.width = progress + '%';
+          
+          if (progress >= 100) {
+            clearInterval(interval);
+            adStatus = 'completed';
+            updateAdState();
+            
+            // Record ad view
+            adsWatched++;
+            updateProgress();
+            
+            // Add user to qualified users if they watched 4 ads
+            if (adsWatched === 4 && currentUser) {
+              if (!qualifiedUsers.some(user => user.id === currentUser.id)) {
+                qualifiedUsers.push({...currentUser});
+                updateQualifiedUsers();
+              }
+            }
+            
+            // Reset to ready state after a delay
+            setTimeout(() => {
+              adStatus = 'ready';
+              updateAdState();
+            }, 3000);
+          }
+        }, 100); // Simulate 10-second ad
+      }, 1500);
+    }
+
+    // Update ad state
+    function updateAdState() {
+      // Hide all states
+      document.getElementById('ad-ready').classList.add('hidden');
+      document.getElementById('ad-loading').classList.add('hidden');
+      document.getElementById('ad-playing').classList.add('hidden');
+      document.getElementById('ad-completed').classList.add('hidden');
+      
+      // Show current state
+      document.getElementById('ad-' + adStatus).classList.remove('hidden');
+      
+      // Update button text
+      const button = document.getElementById('ad-button');
+      if (adStatus === 'ready') {
+        button.textContent = 'Watch Ad';
+        button.disabled = false;
+      } else if (adStatus === 'loading') {
+        button.textContent = 'Loading...';
+        button.disabled = true;
+      } else if (adStatus === 'playing') {
+        button.textContent = 'Playing...';
+        button.disabled = true;
+      } else if (adStatus === 'completed') {
+        button.textContent = 'Ad Completed';
+        button.disabled = true;
+      }
+    }
+
+    // Claim reward
+    function claimReward(e) {
+      e.preventDefault();
+      const email = document.getElementById('claim-email').value;
+      const termsAgreed = document.getElementById('terms-agreed').checked;
+      
+      if (!termsAgreed) {
+        alert('You must agree to the terms and conditions');
+        return;
+      }
+      
+      // Simulate claiming reward
+      setTimeout(() => {
+        document.getElementById('reward-claim').classList.add('hidden');
+        document.getElementById('reward-success').classList.remove('hidden');
+        document.getElementById('reward-email').textContent = email;
+      }, 500);
+    }
+
+    // Go to admin page
+    function goToAdmin() {
+      showPage('admin-page');
+      updateQualifiedUsers();
+    }
+
+    // Update qualified users table
+    function updateQualifiedUsers() {
+      document.getElementById('total-users').textContent = qualifiedUsers.length;
+      
+      if (qualifiedUsers.length === 0) {
+        document.getElementById('no-users').classList.remove('hidden');
+        document.getElementById('users-table').classList.add('hidden');
+        document.getElementById('export-button').disabled = true;
+        return;
+      }
+      
+      document.getElementById('no-users').classList.add('hidden');
+      document.getElementById('users-table').classList.remove('hidden');
+      document.getElementById('export-button').disabled = false;
+      
+      // Clear existing rows
+      const tbody = document.getElementById('users-tbody');
+      tbody.innerHTML = '';
+      
+      // Add user rows
+      qualifiedUsers.forEach(user => {
+        const row = document.createElement('tr');
+        
+        const idCell = document.createElement('td');
+        idCell.className = 'px-6 py-4 whitespace-nowrap text-sm text-gray-500';
+        idCell.textContent = user.id;
+        
+        const usernameCell = document.createElement('td');
+        usernameCell.className = 'px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900';
+        usernameCell.textContent = user.username;
+        
+        const emailCell = document.createElement('td');
+        emailCell.className = 'px-6 py-4 whitespace-nowrap text-sm text-gray-500';
+        emailCell.textContent = user.email;
+        
+        row.appendChild(idCell);
+        row.appendChild(usernameCell);
+        row.appendChild(emailCell);
+        
+        tbody.appendChild(row);
+      });
+    }
+
+    // Export users as CSV
+    function exportUsersCSV() {
+      if (qualifiedUsers.length === 0) return;
+      
+      // Create CSV content
+      const headers = ['ID', 'Username', 'Email'];
+      const csvRows = [
+        headers.join(','),
+        ...qualifiedUsers.map(user => [
+          user.id,
+          user.username,
+          user.email
+        ].join(','))
+      ];
+      
+      const csvContent = 'data:text/csv;charset=utf-8,' + csvRows.join('\n');
+      const encodedUri = encodeURI(csvContent);
+      
+      // Create download link
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', 'qualified_users.csv');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // Initialize the app
+    document.addEventListener('DOMContentLoaded', () => {
+      // Start with auth page
+      showPage('auth-page');
+      showLoginForm();
+    });
+  </script>
+</body>
+</html>
